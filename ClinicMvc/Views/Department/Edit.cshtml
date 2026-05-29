@@ -1,0 +1,21 @@
+@model ClinicMvc.Models.Department
+@{ ViewData["Title"] = "Branş Düzenle"; }
+
+<div class="row justify-content-center"><div class="col-md-5">
+    <div class="card border-0 shadow-sm rounded-4"><div class="card-body">
+        <h4 class="mb-3">Branş Düzenle</h4>
+        <form asp-action="Edit" method="post">
+            <input type="hidden" asp-for="Id" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label"></label>
+                <input asp-for="Name" class="form-control rounded-3" />
+                <span asp-validation-for="Name" class="text-danger small"></span>
+            </div>
+            <button type="submit" class="btn btn-primary rounded-pill px-4">Güncelle</button>
+            <a asp-action="Index" class="btn btn-link">İptal</a>
+        </form>
+    </div></div>
+</div></div>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }
