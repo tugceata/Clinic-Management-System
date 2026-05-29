@@ -1,0 +1,15 @@
+@model ClinicMvc.Models.Doctor
+@{ ViewData["Title"] = "Doktor Sil"; }
+
+<div class="row justify-content-center"><div class="col-md-5">
+<div class="card border-0 shadow-sm rounded-4"><div class="card-body text-center">
+    <h4 class="mb-3">Doktoru sil?</h4>
+    <p><strong>@Model.FullName</strong> (@Model.Department?.Name) silinecek.</p>
+    <p class="text-muted small">Geçmiş randevusu varsa silinmez, pasifleştirilir.</p>
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn btn-danger rounded-pill px-4">Evet</button>
+        <a asp-action="Index" class="btn btn-link">Vazgeç</a>
+    </form>
+</div></div>
+</div></div>

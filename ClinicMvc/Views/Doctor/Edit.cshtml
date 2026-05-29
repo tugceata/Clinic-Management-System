@@ -1,0 +1,40 @@
+@model ClinicMvc.Models.Doctor
+@{ ViewData["Title"] = "Doktor Düzenle"; }
+
+<div class="row justify-content-center"><div class="col-md-7">
+<div class="card border-0 shadow-sm rounded-4"><div class="card-body">
+    <h4 class="mb-3">Doktor Düzenle</h4>
+    <form asp-action="Edit" method="post">
+        <input type="hidden" asp-for="Id" />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="row g-3">
+            <div class="col-md-6"><label asp-for="FullName" class="form-label"></label>
+                <input asp-for="FullName" class="form-control rounded-3" /><span asp-validation-for="FullName" class="text-danger small"></span></div>
+            <div class="col-md-6"><label asp-for="DoctorNumber" class="form-label"></label>
+                <input asp-for="DoctorNumber" class="form-control rounded-3" /><span asp-validation-for="DoctorNumber" class="text-danger small"></span></div>
+            <div class="col-md-6"><label asp-for="Password" class="form-label"></label>
+                <input asp-for="Password" class="form-control rounded-3" /></div>
+            <div class="col-md-6"><label asp-for="DepartmentId" class="form-label">Branş</label>
+                <select asp-for="DepartmentId" asp-items="ViewBag.Departments" class="form-select rounded-3"></select></div>
+            <div class="col-md-4"><label asp-for="RoomNumber" class="form-label"></label>
+                <input asp-for="RoomNumber" class="form-control rounded-3" /></div>
+            <div class="col-md-4"><label asp-for="MaxAppointments" class="form-label"></label>
+                <input asp-for="MaxAppointments" class="form-control rounded-3" /></div>
+            <div class="col-md-4"><label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control rounded-3" /></div>
+            <div class="col-12"><label asp-for="Bio" class="form-label"></label>
+                <textarea asp-for="Bio" class="form-control rounded-3" rows="2"></textarea></div>
+            <div class="col-12 form-check ms-2">
+                <input asp-for="IsActive" class="form-check-input" />
+                <label asp-for="IsActive" class="form-check-label">Aktif</label>
+            </div>
+        </div>
+        <div class="mt-3">
+            <button type="submit" class="btn btn-primary rounded-pill px-4">Güncelle</button>
+            <a asp-action="Index" class="btn btn-link">İptal</a>
+        </div>
+    </form>
+</div></div>
+</div></div>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

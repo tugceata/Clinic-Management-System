@@ -1,0 +1,33 @@
+@model List<ClinicMvc.Models.Doctor>
+@{ ViewData["Title"] = "Doktorlar"; }
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>Doktorlar</h3>
+    <a asp-action="Create" class="btn btn-primary rounded-pill px-3">+ Yeni Doktor</a>
+</div>
+
+@if (TempData["Error"] != null) { <div class="alert alert-warning">@TempData["Error"]</div> }
+
+<table class="table table-striped table-hover align-middle">
+    <thead><tr><th>No</th><th>Ad Soyad</th><th>Branş</th><th>Oda</th><th>Limit</th><th>Durum</th><th class="text-end">İşlem</th></tr></thead>
+    <tbody>
+    @foreach (var d in Model)
+    {
+        <tr>
+            <td>@d.DoctorNumber</td>
+            <td>@d.FullName</td>
+            <td>@d.Department?.Name</td>
+            <td>@d.RoomNumber</td>
+            <td>@d.MaxAppointments</td>
+            <td>
+                @if (d.IsActive) { <span class="badge bg-success">Aktif</span> }
+                else { <span class="badge bg-secondary">Pasif</span> }
+            </td>
+            <td class="text-end">
+                <a asp-action="Edit" asp-route-id="@d.Id" class="btn btn-sm btn-outline-secondary">Düzenle</a>
+                <a asp-action="Delete" asp-route-id="@d.Id" class="btn btn-sm btn-outline-danger">Sil</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
