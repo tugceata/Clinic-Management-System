@@ -19,15 +19,36 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
+    @{
+        var role = Context.Session.GetString("Role");
+        var userName = Context.Session.GetString("UserName");
+    }
+    <ul class="navbar-nav flex-grow-1">
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Ana Sayfa</a>
+        </li>
+    </ul>
+    <ul class="navbar-nav">
+        @if (role == null)
+{
+    <li class="nav-item"><a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Giriş</a></li>
+    <li class="nav-item"><a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Kaydol</a></li>
+}
+        else
+        {
+            <li class="nav-item d-flex align-items-center me-2">
+                <span class="badge rounded-pill bg-secondary">@role</span>
+            </li>
+            <li class="nav-item d-flex align-items-center me-2">
+                <span class="text-dark small">@userName</span>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-controller="Account" asp-action="Logout">Çıkış</a>
+            </li>
+        }
+    </ul>
+</div>
+
             </div>
         </nav>
     </header>

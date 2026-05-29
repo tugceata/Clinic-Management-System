@@ -15,6 +15,11 @@ public class Patient
     [EmailAddress(ErrorMessage = "Geçerli bir e-posta giriniz.")]
     public string Email { get; set; } = string.Empty;
 
+    [Required(ErrorMessage = "Şifre zorunludur.")]
+    [StringLength(50)]
+    [Display(Name = "Şifre")]
+    public string Password { get; set; } = string.Empty;
+
     [Phone(ErrorMessage = "Geçerli bir telefon giriniz.")]
     [Display(Name = "Telefon")]
     public string Phone { get; set; } = string.Empty;
@@ -26,7 +31,6 @@ public class Patient
     [Display(Name = "Cinsiyet")]
     public Gender Gender { get; set; }
 
-    // İlişkiler
     public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
     public ICollection<Review> Reviews { get; set; } = new List<Review>();
 }

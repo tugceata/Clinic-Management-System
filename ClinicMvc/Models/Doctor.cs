@@ -11,6 +11,16 @@ public class Doctor
     [Display(Name = "Ad Soyad")]
     public string FullName { get; set; } = string.Empty;
 
+    [Required(ErrorMessage = "Doktor no zorunludur.")]
+    [StringLength(20)]
+    [Display(Name = "Doktor No")]
+    public string DoctorNumber { get; set; } = string.Empty;
+
+    [Required(ErrorMessage = "Şifre zorunludur.")]
+    [StringLength(50)]
+    [Display(Name = "Şifre")]
+    public string Password { get; set; } = string.Empty;
+
     [Required(ErrorMessage = "Branş seçiniz.")]
     [Display(Name = "Branş")]
     public int DepartmentId { get; set; }
@@ -34,7 +44,6 @@ public class Doctor
     [Display(Name = "Aktif mi?")]
     public bool IsActive { get; set; } = true;
 
-    // İlişkiler
     public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
     public ICollection<Review> Reviews { get; set; } = new List<Review>();
 }

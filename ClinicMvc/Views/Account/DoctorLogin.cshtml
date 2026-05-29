@@ -1,0 +1,21 @@
+@{ ViewData["Title"] = "Doktor Girişi"; }
+
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-body">
+                <h4 class="text-center mb-3">🩺 Doktor Girişi</h4>
+                @if (TempData["Error"] != null)
+                {
+                    <div class="alert alert-danger py-2 text-center">@TempData["Error"]</div>
+                }
+                <form asp-action="DoctorLogin" method="post">
+                    <input name="doctorNumber" class="form-control mb-2 rounded-pill" placeholder="Doktor No (örn. DR001)" />
+                    <input name="password" type="password" class="form-control mb-3 rounded-pill" placeholder="Şifre" />
+                    <button type="submit" class="btn btn-success w-100 rounded-pill">Giriş</button>
+                </form>
+                <div class="text-center mt-2"><a asp-action="Login" class="small">Geri</a></div>
+            </div>
+        </div>
+    </div>
+</div>
