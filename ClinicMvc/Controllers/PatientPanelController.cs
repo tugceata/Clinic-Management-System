@@ -101,6 +101,13 @@ public IActionResult DoctorDetails(int id)
             DoctorId = doctorId, PatientId = PatientId,
             AppointmentDate = slot, Status = AppointmentStatus.Pending
         });
+        var patient = _db.Patients.Find(PatientId);
+        _db.Notifications.Add(new Notification
+        {
+            TargetRole = "Doctor",
+            TargetUserId = doctorId,
+            Message = $"Yeni randevu talebi: {patient?.FullName} - {slot:dd.MM.yyyy HH:mm}"
+        });
         _db.SaveChanges();
         TempData["Msg"] = "Randevu talebin oluşturuldu, doktor onayını bekliyor.";
         return RedirectToAction("MyAppointments");
@@ -219,6 +226,13 @@ public IActionResult DoctorDetails(int id)
         }
 
         appt.Status = AppointmentStatus.Cancelled;
+        var patient2 = _db.Patients.Find(PatientId);
+        _db.Notifications.Add(new Notification
+        {
+            TargetRole = "Doctor",
+            TargetUserId = appt.DoctorId,
+            Message = $"Hasta iptal etti: {patient2?.FullName} - {appt.AppointmentDate:dd.MM.yyyy HH:mm}"
+        });
         _db.SaveChanges();
         TempData["Msg"] = "Randevunuz iptal edildi.";
         return RedirectToAction("MyAppointments");

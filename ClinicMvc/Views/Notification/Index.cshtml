@@ -1,0 +1,41 @@
+@model List<ClinicMvc.Models.Notification>
+@{ ViewData["Title"] = "Bildirimler"; }
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="mb-0">Bildirimler</h3>
+    @if (Model.Any(n => !n.IsRead))
+    {
+        <form asp-action="MarkAllRead" method="post">
+            <button class="btn btn-sm btn-outline-secondary rounded-pill">Tümünü Okundu İşaretle</button>
+        </form>
+    }
+</div>
+
+@if (!Model.Any())
+{
+    <p class="text-muted">Henüz bildirim yok.</p>
+}
+else
+{
+    <div class="list-group">
+    @foreach (var n in Model)
+    {
+        <div class="list-group-item d-flex justify-content-between align-items-start @(n.IsRead ? "" : "bg-light")">
+            <div>
+                <div>
+                    @if (!n.IsRead) { <span class="badge bg-primary me-2">Yeni</span> }
+                    @n.Message
+                </div>
+                <small class="text-muted">@n.CreatedAt.ToString("dd.MM.yyyy HH:mm")</small>
+            </div>
+            @if (!n.IsRead)
+            {
+                <form asp-action="MarkRead" method="post">
+                    <input type="hidden" name="id" value="@n.Id" />
+                    <button class="btn btn-sm btn-link">Okundu</button>
+                </form>
+            }
+        </div>
+    }
+    </div>
+}

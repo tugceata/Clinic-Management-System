@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using ClinicMvc.Data
+@inject AppDbContext Db
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -19,37 +21,53 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-    @{
-        var role = Context.Session.GetString("Role");
-        var userName = Context.Session.GetString("UserName");
-    }
-    <ul class="navbar-nav flex-grow-1">
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Ana Sayfa</a>
-        </li>
-    </ul>
-    <ul class="navbar-nav">
-        @if (role == null)
-{
-    <li class="nav-item"><a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Giriş</a></li>
-    <li class="nav-item"><a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Kaydol</a></li>
-}
-else
-        {
-
-            <li class="nav-item d-flex align-items-center me-2">
-                <span class="badge rounded-pill bg-secondary">@role</span>
-            </li>
-            <li class="nav-item d-flex align-items-center me-2">
-                <span class="text-dark small">@userName</span>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-controller="Account" asp-action="Logout">Çıkış</a>
-            </li>
-        }
-    </ul>
-</div>
-
+                    @{
+                        var role = Context.Session.GetString("Role");
+                        var userName = Context.Session.GetString("UserName");
+                        int unread = 0;
+                        if (role == "Doctor" || role == "Patient")
+                        {
+                            int uid = Context.Session.GetInt32("UserId") ?? 0;
+                            unread = Db.Notifications.Count(n => n.TargetRole == role && n.TargetUserId == uid && !n.IsRead);
+                        }
+                    }
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Ana Sayfa</a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        @if (role == null)
+                        {
+                            <li class="nav-item"><a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Giriş</a></li>
+                            <li class="nav-item"><a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Kaydol</a></li>
+                        }
+                        else
+                        {
+                            @if (role == "Doctor" || role == "Patient")
+                            {
+                                <li class="nav-item d-flex align-items-center me-3">
+                                    <a asp-controller="Notification" asp-action="Index" class="text-dark text-decoration-none position-relative">
+                                        🔔
+                                        @if (unread > 0)
+                                        {
+                                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:.6rem;">@unread</span>
+                                        }
+                                    </a>
+                                </li>
+                            }
+                            <li class="nav-item d-flex align-items-center me-2">
+                                <span class="badge rounded-pill bg-secondary">@role</span>
+                            </li>
+                            <li class="nav-item d-flex align-items-center me-2">
+                                <span class="text-dark small">@userName</span>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Logout">Çıkış</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
             </div>
         </nav>
     </header>

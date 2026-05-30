@@ -55,7 +55,14 @@ public IActionResult Index(string? search, int page = 1)
     public IActionResult Approve(int id)
     {
         var appt = _db.Appointments.FirstOrDefault(a => a.Id == id && a.DoctorId == DoctorId);
-        if (appt != null) { appt.Status = AppointmentStatus.Approved; _db.SaveChanges(); }
+        if (appt != null) { appt.Status = AppointmentStatus.Approved; 
+        _db.Notifications.Add(new Notification
+            {
+                TargetRole = "Patient",
+                TargetUserId = appt.PatientId,
+                Message = $"Randevun onaylandı: {appt.AppointmentDate:dd.MM.yyyy HH:mm}"
+            });
+        _db.SaveChanges(); }
         return RedirectToAction("Pending");
     }
 
@@ -63,7 +70,14 @@ public IActionResult Index(string? search, int page = 1)
     public IActionResult CancelAppt(int id)
     {
         var appt = _db.Appointments.FirstOrDefault(a => a.Id == id && a.DoctorId == DoctorId);
-        if (appt != null) { appt.Status = AppointmentStatus.Cancelled; _db.SaveChanges(); }
+        if (appt != null) { appt.Status = AppointmentStatus.Cancelled; 
+        _db.Notifications.Add(new Notification
+            {
+                TargetRole = "Patient",
+                TargetUserId = appt.PatientId,
+                Message = $"Randevun reddedildi: {appt.AppointmentDate:dd.MM.yyyy HH:mm}"
+            });
+        _db.SaveChanges(); }
         return RedirectToAction("Pending");
     }
 
