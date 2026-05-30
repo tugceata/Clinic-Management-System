@@ -36,11 +36,7 @@
 }
 else
         {
-            @if (role == "Admin")
-{
-    <li class="nav-item"><a class="nav-link text-dark" asp-controller="Department" asp-action="Index">Branşlar</a></li>
-    <li class="nav-item"><a class="nav-link text-dark" asp-controller="Doctor" asp-action="Index">Doktorlar</a></li>
-}
+
             <li class="nav-item d-flex align-items-center me-2">
                 <span class="badge rounded-pill bg-secondary">@role</span>
             </li>

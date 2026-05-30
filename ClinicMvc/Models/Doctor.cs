@@ -34,6 +34,14 @@ public class Doctor
     [Display(Name = "Maksimum Randevu")]
     public int MaxAppointments { get; set; } = 10;
 
+    [Range(0, 23)]
+    [Display(Name = "Mesai Başlangıç")]
+    public int WorkStartHour { get; set; } = 9;
+
+    [Range(0, 23)]
+    [Display(Name = "Mesai Bitiş")]
+    public int WorkEndHour { get; set; } = 17;
+
     [EmailAddress(ErrorMessage = "Geçerli bir e-posta giriniz.")]
     public string Email { get; set; } = string.Empty;
 

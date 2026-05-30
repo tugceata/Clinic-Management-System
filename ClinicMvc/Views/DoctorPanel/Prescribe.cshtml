@@ -1,0 +1,48 @@
+@model ClinicMvc.Models.Appointment
+@{ ViewData["Title"] = "Reçete"; }
+
+<h3 class="mb-1">Reçete</h3>
+<p class="text-muted">@Model.Patient?.FullName · @Model.AppointmentDate.ToString("dd.MM.yyyy HH:mm")</p>
+
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm rounded-4"><div class="card-body">
+            <h6>Yeni Reçete Ekle</h6>
+            <form asp-action="AddPrescription" method="post">
+    <input type="hidden" name="AppointmentId" value="@Model.Id" />
+    <div class="mb-2">
+        <label class="form-label">İlaç</label>
+        <input name="Medication" class="form-control rounded-3" />
+    </div>
+    <div class="mb-2">
+        <label class="form-label">Doz</label>
+        <input name="Dosage" class="form-control rounded-3" />
+    </div>
+    <div class="mb-2">
+        <label class="form-label">Kullanım Talimatı</label>
+        <textarea name="Instructions" class="form-control rounded-3" rows="2"></textarea>
+    </div>
+    <button class="btn btn-primary rounded-pill px-4">Ekle</button>
+    <a asp-action="Index" class="btn btn-link">Geri</a>
+</form>
+        </div></div>
+    </div>
+    <div class="col-md-6">
+        <h6>Mevcut Reçeteler</h6>
+        @if (Model.Prescriptions.Any())
+        {
+            <ul class="list-group">
+            @foreach (var p in Model.Prescriptions)
+            {
+                <li class="list-group-item">
+                    <strong>@p.Medication</strong> — @p.Dosage
+                    <div class="text-muted small">@p.Instructions</div>
+                </li>
+            }
+            </ul>
+        }
+        else { <p class="text-muted">Henüz reçete yok.</p> }
+    </div>
+</div>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

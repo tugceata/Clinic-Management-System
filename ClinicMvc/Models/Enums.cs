@@ -2,9 +2,10 @@ namespace ClinicMvc.Models;
 
 public enum AppointmentStatus
 {
-    Pending,    // Bekliyor
-    Completed,  // Tamamlandı
-    Cancelled   // İptal
+    Pending,
+    Completed,
+    Cancelled,
+    Approved
 }
 
 public enum Gender

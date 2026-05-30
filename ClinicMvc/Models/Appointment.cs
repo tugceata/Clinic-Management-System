@@ -29,6 +29,10 @@ public class Appointment
     [Display(Name = "Not")]
     public string Notes { get; set; } = string.Empty;
 
+    [StringLength(300)]
+    [Display(Name = "Teşhis")]
+    public string Diagnosis { get; set; } = string.Empty;
+
     // Bir randevuya reçete(ler) bağlanabilir
     public ICollection<Prescription> Prescriptions { get; set; } = new List<Prescription>();
 }

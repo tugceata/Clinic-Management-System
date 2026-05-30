@@ -1,0 +1,40 @@
+@model ClinicMvc.Models.Doctor
+@{ ViewData["Title"] = "Ayarlar"; }
+
+<div class="row justify-content-center"><div class="col-md-6">
+<div class="card border-0 shadow-sm rounded-4"><div class="card-body">
+    <h4 class="mb-3">Ayarlarım</h4>
+    @if (TempData["Msg"] != null) { <div class="alert alert-success py-2">@TempData["Msg"]</div> }
+    <form asp-action="Settings" method="post">
+        <div class="mb-3">
+            <label asp-for="RoomNumber" class="form-label"></label>
+            <input asp-for="RoomNumber" class="form-control rounded-3" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="MaxAppointments" class="form-label"></label>
+            <input asp-for="MaxAppointments" class="form-control rounded-3" />
+        </div>
+        <div class="row">
+            <div class="col-6 mb-3">
+                <label asp-for="WorkStartHour" class="form-label"></label>
+                <select asp-for="WorkStartHour" class="form-select rounded-3">
+                    @for (int h = 0; h < 24; h++)
+                    {
+                        <option value="@h" selected="@(Model.WorkStartHour == h)">@h:00</option>
+                    }
+                </select>
+            </div>
+            <div class="col-6 mb-3">
+                <label asp-for="WorkEndHour" class="form-label"></label>
+                <select asp-for="WorkEndHour" class="form-select rounded-3">
+                    @for (int h = 0; h < 24; h++)
+                    {
+                        <option value="@h" selected="@(Model.WorkEndHour == h)">@h:00</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <button class="btn btn-primary rounded-pill px-4">Kaydet</button>
+    </form>
+</div></div>
+</div></div>

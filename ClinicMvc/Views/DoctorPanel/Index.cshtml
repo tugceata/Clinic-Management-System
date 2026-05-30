@@ -1,0 +1,53 @@
+@using ClinicMvc.Models
+@model List<ClinicMvc.Models.Appointment>
+@{
+    ViewData["Title"] = "Randevularım";
+    var search = ViewBag.Search as string;
+    int page = ViewBag.Page; int totalPages = ViewBag.TotalPages;
+    Func<AppointmentStatus, string> badge = s => s switch
+    {
+        AppointmentStatus.Approved  => "info",
+        AppointmentStatus.Completed => "success",
+        AppointmentStatus.Cancelled => "danger",
+        _ => "warning"
+    };
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="mb-0">Randevularım</h3>
+    <form method="get" class="d-flex" style="gap:.5rem">
+        <input name="search" value="@search" class="form-control form-control-sm rounded-pill" placeholder="Hasta adı ara..." />
+        <button class="btn btn-sm btn-primary rounded-pill px-3">Ara</button>
+    </form>
+</div>
+
+<table class="table table-hover align-middle">
+    <thead><tr><th>Hasta</th><th>Yaş</th><th>Tarih</th><th>Durum</th><th class="text-end">İşlem</th></tr></thead>
+    <tbody>
+    @if (!Model.Any()) { <tr><td colspan="5" class="text-center text-muted">Kayıt bulunamadı.</td></tr> }
+    @foreach (var a in Model)
+    {
+        <tr>
+            <td>@a.Patient?.FullName</td>
+            <td>@a.Patient?.Age</td>
+            <td>@a.AppointmentDate.ToString("dd.MM.yyyy HH:mm")</td>
+            <td><span class="badge bg-@badge(a.Status)">@a.Status.ToTr()</span></td>
+            <td class="text-end">
+                <a asp-action="Details" asp-route-id="@a.Id" class="btn btn-sm btn-outline-primary">Detay</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@if (totalPages > 1)
+{
+    <nav><ul class="pagination justify-content-center">
+        @for (int p = 1; p <= totalPages; p++)
+        {
+            <li class="page-item @(p == page ? "active" : "")">
+                <a class="page-link" asp-action="Index" asp-route-page="@p" asp-route-search="@search">@p</a>
+            </li>
+        }
+    </ul></nav>
+}

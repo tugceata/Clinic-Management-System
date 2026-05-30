@@ -1,9 +1,11 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClinicMvc.Models;
 
 public class Patient
 {
+    
     public int Id { get; set; }
 
     [Required(ErrorMessage = "İsim zorunludur.")]
@@ -30,6 +32,18 @@ public class Patient
 
     [Display(Name = "Cinsiyet")]
     public Gender Gender { get; set; }
+
+    [NotMapped]
+public int Age
+{
+    get
+    {
+        var t = DateTime.Today;
+        var age = t.Year - DateOfBirth.Year;
+        if (DateOfBirth.Date > t.AddYears(-age)) age--;
+        return age;
+    }
+}
 
     public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
     public ICollection<Review> Reviews { get; set; } = new List<Review>();

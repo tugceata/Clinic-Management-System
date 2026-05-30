@@ -3,6 +3,7 @@ using System;
 using ClinicMvc.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClinicMvc.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260530142623_DoctorWorkHours")]
+    partial class DoctorWorkHours
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.8");
@@ -24,11 +27,6 @@ namespace ClinicMvc.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("AppointmentDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Diagnosis")
-                        .IsRequired()
-                        .HasMaxLength(300)
                         .HasColumnType("TEXT");
 
                     b.Property<int>("DoctorId")
