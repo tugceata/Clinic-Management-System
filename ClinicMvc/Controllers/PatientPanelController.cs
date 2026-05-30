@@ -176,5 +176,52 @@ public IActionResult DoctorDetails(int id)
         }
         return RedirectToAction("MyAppointments");
     }
+    [HttpGet]
+    public IActionResult AvailableSlots(int doctorId, DateTime date)
+    {
+        var doc = _db.Doctors.FirstOrDefault(d => d.Id == doctorId && d.IsActive);
+        if (doc == null) return Json(new int[0]);
+
+        var taken = _db.Appointments
+            .Where(a => a.DoctorId == doctorId
+                && a.AppointmentDate.Date == date.Date
+                && a.Status != AppointmentStatus.Cancelled)
+            .Select(a => a.AppointmentDate.Hour)
+            .ToHashSet();
+
+        var now = DateTime.Now;
+        var slots = new List<int>();
+        for (int h = doc.WorkStartHour; h < doc.WorkEndHour; h++)
+        {
+            if (taken.Contains(h)) continue;
+            if (date.Date.AddHours(h) < now) continue;
+            slots.Add(h);
+        }
+        return Json(slots);
+    }
+    [HttpPost]
+    public IActionResult CancelAppt(int id)
+    {
+        var appt = _db.Appointments.FirstOrDefault(a => a.Id == id && a.PatientId == PatientId);
+        if (appt == null) return RedirectToAction("MyAppointments");
+
+        if (appt.Status != AppointmentStatus.Pending && appt.Status != AppointmentStatus.Approved)
+        {
+            TempData["Error"] = "Bu randevu iptal edilemez.";
+            return RedirectToAction("MyAppointments");
+        }
+
+        // 24 saatten az kala iptal yok
+        if ((appt.AppointmentDate - DateTime.Now).TotalHours < 24)
+        {
+            TempData["Error"] = "Randevuya 24 saatten az kaldığı için iptal edilemez.";
+            return RedirectToAction("MyAppointments");
+        }
+
+        appt.Status = AppointmentStatus.Cancelled;
+        _db.SaveChanges();
+        TempData["Msg"] = "Randevunuz iptal edildi.";
+        return RedirectToAction("MyAppointments");
+    }
 
 }

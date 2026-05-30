@@ -1,6 +1,6 @@
 @using ClinicMvc.Models
-@model ClinicMvc.Models.Appointment
-@{ ViewData["Title"] = "Randevu Detayı"; }
+@model AppointmentDetailViewModel
+@{ ViewData["Title"] = "Randevu Detayı"; var a = Model.Appointment; }
 
 <h3 class="mb-3">Randevu Detayı</h3>
 @if (TempData["Msg"] != null) { <div class="alert alert-success py-2">@TempData["Msg"]</div> }
@@ -9,37 +9,59 @@
     <div class="col-md-7">
         <div class="card border-0 shadow-sm rounded-4 mb-4"><div class="card-body">
             <h6 class="text-muted">Hasta</h6>
-            <p class="mb-1 fw-semibold">@Model.Patient?.FullName <span class="text-muted small">· @Model.Patient?.Age yaşında</span></p>
-            <p class="mb-1 small text-muted">@Model.Patient?.Phone · @Model.Patient?.Email</p>
+            <p class="mb-1 fw-semibold">@a.Patient?.FullName <span class="text-muted small">· @a.Patient?.Age yaşında</span></p>
+            <p class="mb-1 small text-muted">@a.Patient?.Phone · @a.Patient?.Email</p>
             <hr />
-            <p class="mb-1"><span class="text-muted">Tarih:</span> @Model.AppointmentDate.ToString("dd.MM.yyyy HH:mm")</p>
-            <p class="mb-0"><span class="text-muted">Mevcut durum:</span> <strong>@Model.Status.ToTr()</strong></p>
+            <p class="mb-1"><span class="text-muted">Tarih:</span> @a.AppointmentDate.ToString("dd.MM.yyyy HH:mm")</p>
+            <p class="mb-0"><span class="text-muted">Mevcut durum:</span> <strong>@a.Status.ToTr()</strong></p>
         </div></div>
 
         <div class="card border-0 shadow-sm rounded-4"><div class="card-body">
             <h6 class="mb-3">Doktor Bilgileri (sen doldur)</h6>
             <form asp-action="UpdateDetails" method="post">
-                <input type="hidden" name="id" value="@Model.Id" />
+                <input type="hidden" name="id" value="@a.Id" />
                 <div class="mb-3">
                     <label class="form-label">Durum</label>
                     <select name="status" class="form-select rounded-3">
                         @foreach (var s in Enum.GetValues<AppointmentStatus>())
                         {
-                            <option value="@s" selected="@(Model.Status == s)">@s.ToTr()</option>
+                            <option value="@s" selected="@(a.Status == s)">@s.ToTr()</option>
                         }
                     </select>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Teşhis</label>
-                    <textarea name="diagnosis" class="form-control rounded-3" rows="2" placeholder="Henüz teşhis girilmedi...">@Model.Diagnosis</textarea>
+                    <textarea name="diagnosis" class="form-control rounded-3" rows="2" placeholder="Henüz teşhis girilmedi...">@a.Diagnosis</textarea>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Not</label>
-                    <textarea name="notes" class="form-control rounded-3" rows="2" placeholder="Not ekle...">@Model.Notes</textarea>
+                    <textarea name="notes" class="form-control rounded-3" rows="2" placeholder="Not ekle...">@a.Notes</textarea>
                 </div>
                 <button class="btn btn-primary rounded-pill px-4">Kaydet</button>
                 <a asp-action="Index" class="btn btn-link">Geri</a>
             </form>
+        </div></div>
+
+        <div class="card border-0 shadow-sm rounded-4 mt-4"><div class="card-body">
+            <h6 class="mb-3">Hasta Geçmişi</h6>
+            @if (!Model.History.Any())
+            {
+                <p class="text-muted small mb-0">Tamamlanmış başka randevu yok.</p>
+            }
+            else
+            {
+                @foreach (var h in Model.History)
+                {
+                    <div class="border-start border-2 border-primary ps-3 pb-3 mb-2">
+                        <div class="text-muted small">@h.AppointmentDate.ToString("dd.MM.yyyy")</div>
+                        <div><strong>@h.Doctor?.FullName</strong> <span class="text-muted small">· @h.Doctor?.Department?.Name</span></div>
+                        @if (!string.IsNullOrWhiteSpace(h.Diagnosis))
+                        {
+                            <div class="small mt-1">@h.Diagnosis</div>
+                        }
+                    </div>
+                }
+            }
         </div></div>
     </div>
 
@@ -47,12 +69,12 @@
         <div class="card border-0 shadow-sm rounded-4"><div class="card-body">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h6 class="mb-0">Reçeteler</h6>
-                <a asp-action="Prescribe" asp-route-id="@Model.Id" class="btn btn-sm btn-outline-primary rounded-pill">+ Reçete</a>
+                <a asp-action="Prescribe" asp-route-id="@a.Id" class="btn btn-sm btn-outline-primary rounded-pill">+ Reçete</a>
             </div>
-            @if (Model.Prescriptions.Any())
+            @if (a.Prescriptions.Any())
             {
                 <ul class="list-group list-group-flush">
-                @foreach (var p in Model.Prescriptions)
+                @foreach (var p in a.Prescriptions)
                 {
                     <li class="list-group-item px-0">
                         <strong>@p.Medication</strong> — @p.Dosage

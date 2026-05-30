@@ -169,7 +169,7 @@ public IActionResult Index(string? search, int page = 1)
         return RedirectToAction("Profile");
     }
     // Randevu detay
-    [HttpGet]
+[HttpGet]
     public IActionResult Details(int id)
     {
         var appt = _db.Appointments
@@ -177,7 +177,20 @@ public IActionResult Index(string? search, int page = 1)
             .Include(a => a.Prescriptions)
             .FirstOrDefault(a => a.Id == id && a.DoctorId == DoctorId);
         if (appt == null) return RedirectToAction("Index");
-        return View(appt);
+
+        var history = _db.Appointments
+            .Include(a => a.Doctor).ThenInclude(d => d!.Department)
+            .Where(a => a.PatientId == appt.PatientId && a.Id != appt.Id
+                && a.Status == AppointmentStatus.Completed)
+            .OrderByDescending(a => a.AppointmentDate)
+            .Take(10)
+            .ToList();
+
+        return View(new ClinicMvc.ViewModels.AppointmentDetailViewModel
+        {
+            Appointment = appt,
+            History = history
+        });
     }
 
     // Doktor: durum + not + teşhis doldurur

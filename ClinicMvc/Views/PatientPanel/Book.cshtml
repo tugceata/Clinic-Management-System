@@ -7,23 +7,71 @@
     <p class="text-muted">@Model.FullName · @Model.Department?.Name · Mesai @Model.WorkStartHour:00 - @Model.WorkEndHour:00</p>
     @if (TempData["Error"] != null) { <div class="alert alert-danger py-2">@TempData["Error"]</div> }
 
-    <form asp-action="Book" method="post">
+    <form asp-action="Book" method="post" id="bookForm">
         <input type="hidden" name="doctorId" value="@Model.Id" />
+        <input type="hidden" name="hour" id="hour" />
+
         <div class="mb-3">
             <label class="form-label">Tarih</label>
-            <input name="date" type="date" min="@DateTime.Today.ToString("yyyy-MM-dd")" required class="form-control rounded-3" />
+            <input id="date" name="date" type="date" min="@DateTime.Today.ToString("yyyy-MM-dd")" required class="form-control rounded-3" />
         </div>
+
         <div class="mb-3">
-            <label class="form-label">Saat</label>
-            <select name="hour" class="form-select rounded-3" required>
-                @for (int h = Model.WorkStartHour; h < Model.WorkEndHour; h++)
-                {
-                    <option value="@h">@h:00</option>
-                }
-            </select>
+            <label class="form-label">Müsait Saatler</label>
+            <div id="slots" class="d-flex flex-wrap gap-2">
+                <span class="text-muted small">Önce tarih seçin.</span>
+            </div>
         </div>
-        <button class="btn btn-primary rounded-pill px-4">Randevuyu Oluştur</button>
+
+        <button type="submit" id="submitBtn" class="btn btn-primary rounded-pill px-4" disabled>Randevuyu Oluştur</button>
         <a asp-action="Doctors" class="btn btn-link">İptal</a>
     </form>
 </div></div>
 </div></div>
+
+@section Scripts {
+<script>
+    const doctorId = @Model.Id;
+    const dateInput = document.getElementById('date');
+    const slotsDiv = document.getElementById('slots');
+    const hourInput = document.getElementById('hour');
+    const submitBtn = document.getElementById('submitBtn');
+
+    dateInput.addEventListener('change', async () => {
+        const date = dateInput.value;
+        hourInput.value = '';
+        submitBtn.disabled = true;
+        if (!date) return;
+        slotsDiv.innerHTML = '<span class="text-muted small">Yükleniyor...</span>';
+
+        try {
+            const res = await fetch(`/PatientPanel/AvailableSlots?doctorId=${doctorId}&date=${date}`);
+            const slots = await res.json();
+            if (!slots.length) {
+                slotsDiv.innerHTML = '<span class="text-muted small">Bu tarihte müsait saat yok.</span>';
+                return;
+            }
+            slotsDiv.innerHTML = '';
+            slots.forEach(h => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'btn btn-sm btn-outline-primary rounded-pill';
+                btn.textContent = String(h).padStart(2, '0') + ':00';
+                btn.addEventListener('click', () => {
+                    slotsDiv.querySelectorAll('button').forEach(b => {
+                        b.classList.remove('btn-primary');
+                        b.classList.add('btn-outline-primary');
+                    });
+                    btn.classList.remove('btn-outline-primary');
+                    btn.classList.add('btn-primary');
+                    hourInput.value = h;
+                    submitBtn.disabled = false;
+                });
+                slotsDiv.appendChild(btn);
+            });
+        } catch (err) {
+            slotsDiv.innerHTML = '<span class="text-danger small">Saatler yüklenemedi.</span>';
+        }
+    });
+</script>
+}

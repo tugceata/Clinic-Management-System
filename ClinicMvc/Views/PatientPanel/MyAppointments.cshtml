@@ -36,6 +36,15 @@
                 else { <span class="text-muted small">—</span> }
             </td>
             <td class="text-end">
+                @if ((a.Status == AppointmentStatus.Pending || a.Status == AppointmentStatus.Approved)
+                     && (a.AppointmentDate - DateTime.Now).TotalHours >= 24)
+                {
+                    <form asp-action="CancelAppt" method="post" class="d-inline"
+                          onsubmit="return confirm('Randevuyu iptal etmek istediğine emin misin?');">
+                        <input type="hidden" name="id" value="@a.Id" />
+                        <button class="btn btn-sm btn-outline-danger rounded-pill">İptal Et</button>
+                    </form>
+                }
                 @if (a.Status == AppointmentStatus.Completed && a.Doctor != null)
                 {
                     if (reviewedDoctorIds.Contains(a.Doctor.Id))
