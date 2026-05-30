@@ -1,0 +1,46 @@
+@using ClinicMvc.Models
+@model List<ClinicMvc.Models.Doctor>
+@{
+    ViewData["Title"] = "Doktor Bul";
+    var search = ViewBag.Search as string;
+    var avgDict = ViewBag.AvgDict as Dictionary<int, double> ?? new();
+    var cntDict = ViewBag.CntDict as Dictionary<int, int> ?? new();
+}
+
+<h3 class="mb-3">Doktor Bul</h3>
+
+<form method="get" class="row g-2 mb-4">
+    <div class="col-md-4">
+        <select name="departmentId" asp-items="ViewBag.Departments" class="form-select rounded-pill">
+            <option value="">Tüm branşlar</option>
+        </select>
+    </div>
+    <div class="col-md-6">
+        <input name="search" value="@search" class="form-control rounded-pill" placeholder="Doktor adı ara..." />
+    </div>
+    <div class="col-md-2">
+        <button class="btn btn-primary rounded-pill w-100">Filtrele</button>
+    </div>
+</form>
+
+<div class="row g-4">
+    @if (!Model.Any()) { <div class="col-12 text-center text-muted">Doktor bulunamadı.</div> }
+    @foreach (var d in Model)
+    {
+        var avg = avgDict.TryGetValue(d.Id, out var v) ? v : 0;
+        var cnt = cntDict.TryGetValue(d.Id, out var c) ? c : 0;
+        <div class="col-md-6 col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100"><div class="card-body">
+                <h5 class="mb-1">@d.FullName</h5>
+                <span class="badge bg-light text-muted">@d.Department?.Name</span>
+                <p class="mt-3 mb-1 small">⭐ @(cnt > 0 ? avg.ToString("0.0") : "—") <span class="text-muted">(@cnt yorum)</span></p>
+                <p class="text-muted small mb-0">Oda @d.RoomNumber · Mesai @d.WorkStartHour:00-@d.WorkEndHour:00</p>
+                @if (!string.IsNullOrWhiteSpace(d.Bio)) { <p class="text-muted small mt-2 mb-0">@d.Bio</p> }
+                <div class="d-flex gap-2 mt-3">
+                    <a asp-action="DoctorDetails" asp-route-id="@d.Id" class="btn btn-sm btn-outline-secondary rounded-pill px-3">Detay</a>
+                    <a asp-action="Book" asp-route-doctorId="@d.Id" class="btn btn-sm btn-primary rounded-pill px-3">Randevu Al</a>
+                </div>
+            </div></div>
+        </div>
+    }
+</div>

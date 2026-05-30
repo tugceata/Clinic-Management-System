@@ -65,8 +65,22 @@ else
     }
     else if (role == "Patient")
     {
+        <div class="row g-3 mb-4">
+            <div class="col-md-4"><div class="card border-0 shadow-sm rounded-4 p-3 text-center">
+                <div class="text-muted small">Yaklaşan Randevular</div>
+                <div class="display-6 fw-bold">@ViewBag.UpcomingCount</div></div></div>
+            <div class="col-md-4"><div class="card border-0 shadow-sm rounded-4 p-3 text-center">
+                <div class="text-muted small">Onay Bekleyen</div>
+                <div class="display-6 fw-bold text-warning">@ViewBag.PendingCount</div></div></div>
+            <div class="col-md-4"><div class="card border-0 shadow-sm rounded-4 p-3 text-center">
+                <div class="text-muted small">Tamamlanan</div>
+                <div class="display-6 fw-bold text-success">@ViewBag.CompletedCount</div></div></div>
+        </div>
         <div class="row g-4">
-            <div class="col-12"><p class="text-muted">Hasta paneli Faz 6'da geliyor (doktor bul, randevu al, geçmiş, puanlama).</p></div>
+            <div class="col-md-6"><a asp-controller="PatientPanel" asp-action="Doctors" class="text-decoration-none text-dark">
+                <div class="card border-0 shadow-sm rounded-4 h-100 p-4"><div class="fs-1">🔍</div><h5 class="mt-2">Doktor Bul</h5><p class="text-muted small mb-0">Branşa göre ara, randevu al.</p></div></a></div>
+            <div class="col-md-6"><a asp-controller="PatientPanel" asp-action="MyAppointments" class="text-decoration-none text-dark">
+                <div class="card border-0 shadow-sm rounded-4 h-100 p-4"><div class="fs-1">📅</div><h5 class="mt-2">Randevularım</h5><p class="text-muted small mb-0">Geçmiş ve yaklaşan randevular.</p></div></a></div>
         </div>
     }
 }

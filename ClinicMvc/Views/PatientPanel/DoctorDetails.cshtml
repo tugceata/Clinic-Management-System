@@ -1,0 +1,55 @@
+@using ClinicMvc.Models
+@model ClinicMvc.Models.Doctor
+@{
+    ViewData["Title"] = "Doktor Detayı";
+    var reviews = ViewBag.Reviews as List<Review> ?? new();
+    double avg = (double)(ViewBag.AvgRating ?? 0);
+}
+
+<div class="row g-4">
+    <div class="col-md-7">
+        <div class="card border-0 shadow-sm rounded-4"><div class="card-body">
+            <h3 class="mb-1">@Model.FullName</h3>
+            <span class="badge bg-light text-muted">@Model.Department?.Name</span>
+            <p class="mt-3 mb-1">⭐ @(reviews.Any() ? avg.ToString("0.0") : "—") <span class="text-muted">(@reviews.Count yorum)</span></p>
+            <p class="text-muted small">Oda @Model.RoomNumber · Mesai @Model.WorkStartHour:00 - @Model.WorkEndHour:00</p>
+            @if (!string.IsNullOrWhiteSpace(Model.Bio)) { <hr /><p class="mb-0">@Model.Bio</p> }
+            <div class="mt-3">
+                @if ((bool)(ViewBag.HasCompleted ?? false))
+{
+    if ((bool)(ViewBag.HasReview ?? false))
+    {
+        <a asp-action="Review" asp-route-doctorId="@Model.Id" class="btn btn-outline-secondary rounded-pill px-4">Yorumu Düzenle</a>
+    }
+    else
+    {
+        <a asp-action="Review" asp-route-doctorId="@Model.Id" class="btn btn-outline-primary rounded-pill px-4">Puan Ver</a>
+    }
+}
+{
+    <a asp-action="Review" asp-route-doctorId="@Model.Id" class="btn btn-outline-primary rounded-pill px-4">Puan Ver</a>
+}
+                <a asp-action="Book" asp-route-doctorId="@Model.Id" class="btn btn-primary rounded-pill px-4">Randevu Al</a>
+                <a asp-action="Doctors" class="btn btn-link">Geri</a>
+            </div>
+        </div></div>
+    </div>
+    <div class="col-md-5">
+        <div class="card border-0 shadow-sm rounded-4"><div class="card-body">
+            <h6 class="mb-3">Yorumlar</h6>
+            @if (!reviews.Any()) { <p class="text-muted small mb-0">Henüz yorum yok.</p> }
+            else
+            {
+                @foreach (var r in reviews)
+                {
+                    <div class="mb-3">
+                        <strong>@r.Patient?.FullName</strong>
+                        <span class="ms-2">⭐ @r.Score/5</span>
+                        <div class="text-muted small">@r.CreatedAt.ToString("dd.MM.yyyy")</div>
+                        @if (!string.IsNullOrWhiteSpace(r.Comment)) { <div class="small mt-1">@r.Comment</div> }
+                    </div>
+                }
+            }
+        </div></div>
+    </div>
+</div>

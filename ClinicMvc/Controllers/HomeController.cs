@@ -33,6 +33,16 @@ public class HomeController : Controller
             ViewBag.CompletedCount = _db.Appointments.Count(a => a.DoctorId == docId
                 && a.Status == AppointmentStatus.Completed);
         }
+        else if (role == "Patient")
+        {
+            int patId = HttpContext.Session.GetInt32("UserId") ?? 0;
+            var now = DateTime.Now;
+            ViewBag.UpcomingCount = _db.Appointments.Count(a => a.PatientId == patId
+                && a.AppointmentDate >= now
+                && (a.Status == AppointmentStatus.Pending || a.Status == AppointmentStatus.Approved));
+            ViewBag.PendingCount = _db.Appointments.Count(a => a.PatientId == patId && a.Status == AppointmentStatus.Pending);
+            ViewBag.CompletedCount = _db.Appointments.Count(a => a.PatientId == patId && a.Status == AppointmentStatus.Completed);
+        }
         return View();
     }
 

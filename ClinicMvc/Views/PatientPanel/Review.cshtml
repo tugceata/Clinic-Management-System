@@ -1,0 +1,41 @@
+@model ClinicMvc.Models.Doctor
+@{
+    ViewData["Title"] = "Puan Ver";
+    var existing = ViewBag.Existing as ClinicMvc.Models.Review;
+    string title = existing != null ? "Yorumu Düzenle" : "Puan Ver";
+    string btn = existing != null ? "Güncelle" : "Gönder";
+}
+
+<div class="row justify-content-center"><div class="col-md-6">
+<div class="card border-0 shadow-sm rounded-4"><div class="card-body">
+    <h4>@title</h4>
+    <p class="text-muted">@Model.FullName · @Model.Department?.Name</p>
+    @if (TempData["Error"] != null) { <div class="alert alert-danger py-2">@TempData["Error"]</div> }
+
+    <form asp-action="Review" method="post">
+        <input type="hidden" name="doctorId" value="@Model.Id" />
+
+        <div class="mb-3">
+            <label class="form-label">Puan</label>
+            <div>
+                @for (int s = 1; s <= 5; s++)
+                {
+                    bool isChecked = existing != null && existing.Score == s;
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="score" id="s@(s)" value="@s" required checked="@isChecked" />
+                        <label class="form-check-label" for="s@(s)">@s ⭐</label>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Yorum (opsiyonel)</label>
+            <textarea name="comment" class="form-control rounded-3" rows="3" placeholder="Deneyimini paylaş...">@(existing?.Comment)</textarea>
+        </div>
+
+        <button class="btn btn-primary rounded-pill px-4">@btn</button>
+        <a asp-action="MyAppointments" class="btn btn-link">İptal</a>
+    </form>
+</div></div>
+</div></div>
