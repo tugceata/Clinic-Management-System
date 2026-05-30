@@ -42,7 +42,7 @@ public class PatientPanelController : Controller
         return View(doctors);
     }
 
-    public IActionResult DoctorDetails(int id)
+public IActionResult DoctorDetails(int id)
     {
         var doc = _db.Doctors.Include(d => d.Department).FirstOrDefault(d => d.Id == id && d.IsActive);
         if (doc == null) return RedirectToAction("Doctors");
@@ -50,11 +50,16 @@ public class PatientPanelController : Controller
         var reviews = _db.Reviews.Include(r => r.Patient)
             .Where(r => r.DoctorId == id).OrderByDescending(r => r.CreatedAt).ToList();
 
-        ViewBag.AvgRating = reviews.Any() ? reviews.Average(r => r.Score) : 0;
-        ViewBag.Reviews = reviews;
-        ViewBag.HasCompleted = _db.Appointments.Any(a => a.DoctorId == id && a.PatientId == PatientId && a.Status == AppointmentStatus.Completed);
-        ViewBag.HasReview = _db.Reviews.Any(r => r.DoctorId == id && r.PatientId == PatientId);
-        return View(doc);
+        var vm = new ClinicMvc.ViewModels.DoctorDetailViewModel
+        {
+            Doctor = doc,
+            Reviews = reviews,
+            ReviewCount = reviews.Count,
+            AverageRating = reviews.Any() ? reviews.Average(r => r.Score) : 0,
+            HasCompleted = _db.Appointments.Any(a => a.DoctorId == id && a.PatientId == PatientId && a.Status == AppointmentStatus.Completed),
+            HasReview = _db.Reviews.Any(r => r.DoctorId == id && r.PatientId == PatientId)
+        };
+        return View(vm);
     }
 
     [HttpGet]
