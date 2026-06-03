@@ -8,27 +8,85 @@
 
 @if (role == null)
 {
+    <!-- HERO -->
     <div class="text-center py-5">
-        <h1 class="fw-bold">ClinicMvc</h1>
-        <p class="lead text-muted">Randevunu kolayca al, sağlığını takip et.</p>
+        <div class="text-muted small text-uppercase mb-2" style="letter-spacing:.18em;">Klinik Yönetim</div>
+        <h1 class="fw-bold">Sağlığın için<br />bir nefes kadar yakın</h1>
+        <p class="lead mx-auto mt-3" style="max-width: 580px;">
+            ClinicMvc ile randevunu birkaç tıkla al, geçmişini takip et, doktorlarla şeffaf bir iletişim kur.
+        </p>
         <div class="mt-4">
-            <a asp-controller="Account" asp-action="Login" class="btn btn-primary rounded-pill px-4 me-2">Giriş Yap</a>
-            <a asp-controller="Account" asp-action="Register" class="btn btn-outline-primary rounded-pill px-4">Kaydol</a>
+            <a asp-controller="Account" asp-action="Register" class="btn btn-primary rounded-pill px-4 me-2">Hemen Başla</a>
+            <a asp-controller="Account" asp-action="Login" class="btn btn-outline-primary rounded-pill px-4">Giriş Yap</a>
         </div>
     </div>
-    <div class="row g-4 mt-2">
-        <div class="col-md-4"><div class="card border-0 shadow-sm rounded-4 h-100 text-center p-3"><div class="fs-1">🙋</div><h5>Hasta</h5><p class="text-muted small">Doktor seç, randevu al, geçmişini gör.</p></div></div>
-        <div class="col-md-4"><div class="card border-0 shadow-sm rounded-4 h-100 text-center p-3"><div class="fs-1">🩺</div><h5>Doktor</h5><p class="text-muted small">Randevu yönet, reçete yaz.</p></div></div>
-        <div class="col-md-4"><div class="card border-0 shadow-sm rounded-4 h-100 text-center p-3"><div class="fs-1">🛡️</div><h5>Yönetici</h5><p class="text-muted small">Doktor ve branş yönetimi.</p></div></div>
+
+    <!-- FEATURE CARDS (reklam panelleri) -->
+    <div class="row g-4 mt-3">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100 p-4">
+                <div class="fs-2 mb-2">⏱️</div>
+                <h5>Hızlı Randevu</h5>
+                <p class="text-muted small mb-0">Doktorunla saniyeler içinde buluş. Boş slot ara, tıkla, hazırsın.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100 p-4">
+                <div class="fs-2 mb-2">📂</div>
+                <h5>Geçmişin Senin Elinde</h5>
+                <p class="text-muted small mb-0">Tüm randevular, teşhisler ve reçeteler tek yerde toplandı.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100 p-4">
+                <div class="fs-2 mb-2">🔔</div>
+                <h5>Şeffaf Süreç</h5>
+                <p class="text-muted small mb-0">Onay, hatırlatma, bildirim — her adımda haberdar ol, kafan rahat olsun.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- PULL QUOTE -->
+    <div class="text-center py-5 my-3">
+        <p class="lead" style="font-size:1.7rem; max-width:680px; margin:0 auto; line-height:1.4;">
+            "Sağlık beklemeyle değil,<br />anlık ilgiyle başlar."
+        </p>
+    </div>
+
+    <!-- NASIL ÇALIŞIR -->
+    <h3 class="text-center mb-4">Nasıl Çalışır?</h3>
+    <div class="row g-4 mb-5">
+        <div class="col-md-4 text-center">
+            <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                 style="width:64px; height:64px; background:var(--c-primary-soft); color:var(--c-primary-dark); font-family:Fraunces,serif; font-size:1.6rem; font-weight:600;">1</div>
+            <h5>Kaydol</h5>
+            <p class="text-muted small">E-posta ve şifrenle saniyeler içinde hesap aç.</p>
+        </div>
+        <div class="col-md-4 text-center">
+            <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                 style="width:64px; height:64px; background:var(--c-primary-soft); color:var(--c-primary-dark); font-family:Fraunces,serif; font-size:1.6rem; font-weight:600;">2</div>
+            <h5>Doktorunu Bul</h5>
+            <p class="text-muted small">Branşa göre filtrele, yorumları oku, sana uygun olanı seç.</p>
+        </div>
+        <div class="col-md-4 text-center">
+            <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                 style="width:64px; height:64px; background:var(--c-primary-soft); color:var(--c-primary-dark); font-family:Fraunces,serif; font-size:1.6rem; font-weight:600;">3</div>
+            <h5>Randevu Al</h5>
+            <p class="text-muted small">Müsait slotlardan birini seç, onayı bekle, gel.</p>
+        </div>
+    </div>
+
+    <!-- FINAL CTA -->
+    <div class="card border-0 rounded-4 p-5 text-center mb-4" style="background:var(--c-primary-soft);">
+        <h3 class="mb-2">Hazır mısın?</h3>
+        <p class="text-muted mb-3">Hesabını oluştur, sağlık takibine bugün başla.</p>
+        <div>
+            <a asp-controller="Account" asp-action="Register" class="btn btn-primary rounded-pill px-4">Ücretsiz Kaydol</a>
+        </div>
     </div>
 }
 else
 {
-    <div class="mb-4">
-        <h3 class="fw-bold mb-0">Hoş geldin, @name 👋</h3>
-        <p class="text-muted">@role paneli</p>
-    </div>
-
     @if (role == "Admin")
     {
         <div class="row g-4">
@@ -131,10 +189,12 @@ else
         }
 
         <div class="row g-4">
-            <div class="col-md-6"><a asp-controller="PatientPanel" asp-action="Doctors" class="text-decoration-none text-dark">
+            <div class="col-md-4"><a asp-controller="PatientPanel" asp-action="Doctors" class="text-decoration-none text-dark">
                 <div class="card border-0 shadow-sm rounded-4 h-100 p-4"><div class="fs-1">🔍</div><h5 class="mt-2">Doktor Bul</h5><p class="text-muted small mb-0">Branşa göre ara, randevu al.</p></div></a></div>
-            <div class="col-md-6"><a asp-controller="PatientPanel" asp-action="MyAppointments" class="text-decoration-none text-dark">
+            <div class="col-md-4"><a asp-controller="PatientPanel" asp-action="MyAppointments" class="text-decoration-none text-dark">
                 <div class="card border-0 shadow-sm rounded-4 h-100 p-4"><div class="fs-1">📅</div><h5 class="mt-2">Randevularım</h5><p class="text-muted small mb-0">Geçmiş ve yaklaşan randevular.</p></div></a></div>
+            <div class="col-md-4"><a asp-controller="PatientPanel" asp-action="Profile" class="text-decoration-none text-dark">
+                <div class="card border-0 shadow-sm rounded-4 h-100 p-4"><div class="fs-1">👤</div><h5 class="mt-2">Profil</h5><p class="text-muted small mb-0">Bilgilerini ve şifreni güncelle.</p></div></a></div>
         </div>
     }
 }

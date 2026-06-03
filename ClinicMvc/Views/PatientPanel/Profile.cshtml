@@ -1,0 +1,60 @@
+@using ClinicMvc.Models
+@model ClinicMvc.Models.Patient
+@{ ViewData["Title"] = "Profil"; }
+
+<div class="row justify-content-center"><div class="col-md-7">
+
+<div class="card border-0 shadow-sm rounded-4 mb-4"><div class="card-body">
+    <h4 class="mb-3">Profilim</h4>
+    @if (TempData["Msg"] != null) { <div class="alert alert-success py-2">@TempData["Msg"]</div> }
+
+    <form asp-action="UpdateProfile" method="post">
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">Ad Soyad</label>
+                <input name="fullName" value="@Model.FullName" class="form-control rounded-3" required />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">E-posta</label>
+                <input value="@Model.Email" class="form-control rounded-3" disabled />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Telefon</label>
+                <input name="phone" value="@Model.Phone" class="form-control rounded-3" />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Doğum Tarihi</label>
+                <input name="dateOfBirth" type="date" value="@Model.DateOfBirth.ToString("yyyy-MM-dd")" class="form-control rounded-3" />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Cinsiyet</label>
+                <select name="gender" class="form-select rounded-3">
+                    @foreach (var g in Enum.GetValues<Gender>())
+                    {
+                        <option value="@g" selected="@(Model.Gender == g)">@(g == Gender.Male ? "Erkek" : g == Gender.Female ? "Kadın" : "Diğer")</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Yaş</label>
+                <input value="@Model.Age" class="form-control rounded-3" disabled />
+            </div>
+        </div>
+        <div class="mt-3">
+            <button class="btn btn-primary rounded-pill px-4">Kaydet</button>
+        </div>
+    </form>
+</div></div>
+
+<div class="card border-0 shadow-sm rounded-4"><div class="card-body">
+    <h6>Şifre Değiştir</h6>
+    @if (TempData["PwError"] != null) { <div class="alert alert-danger py-2">@TempData["PwError"]</div> }
+    <form asp-action="ChangePassword" method="post">
+        <input name="oldPassword" type="password" class="form-control rounded-3 mb-2" placeholder="Eski şifre" />
+        <input name="newPassword" type="password" class="form-control rounded-3 mb-2" placeholder="Yeni şifre" />
+        <input name="confirmPassword" type="password" class="form-control rounded-3 mb-3" placeholder="Yeni şifre (tekrar)" />
+        <button class="btn btn-primary rounded-pill px-4">Şifreyi Değiştir</button>
+    </form>
+</div></div>
+
+</div></div>

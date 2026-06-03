@@ -238,4 +238,49 @@ public IActionResult DoctorDetails(int id)
         return RedirectToAction("MyAppointments");
     }
 
+    // ---------- PROFİL ----------
+    [HttpGet]
+    public IActionResult Profile()
+    {
+        var p = _db.Patients.Find(PatientId);
+        if (p == null) return RedirectToAction("Index", "Home");
+        return View(p);
+    }
+
+    [HttpPost]
+    public IActionResult UpdateProfile(string fullName, string phone, DateTime dateOfBirth, Gender gender)
+    {
+        var p = _db.Patients.Find(PatientId);
+        if (p == null) return RedirectToAction("Index", "Home");
+        if (!string.IsNullOrWhiteSpace(fullName)) p.FullName = fullName;
+        p.Phone = phone ?? "";
+        p.DateOfBirth = dateOfBirth;
+        p.Gender = gender;
+        _db.SaveChanges();
+        HttpContext.Session.SetString("UserName", p.FullName);
+        TempData["Msg"] = "Bilgilerin güncellendi.";
+        return RedirectToAction("Profile");
+    }
+
+    [HttpPost]
+    public IActionResult ChangePassword(string oldPassword, string newPassword, string confirmPassword)
+    {
+        var p = _db.Patients.Find(PatientId);
+        if (p == null) return RedirectToAction("Index", "Home");
+
+        if (p.Password != oldPassword)
+            TempData["PwError"] = "Eski şifre yanlış.";
+        else if (string.IsNullOrWhiteSpace(newPassword))
+            TempData["PwError"] = "Yeni şifre boş olamaz.";
+        else if (newPassword != confirmPassword)
+            TempData["PwError"] = "Yeni şifreler eşleşmiyor.";
+        else
+        {
+            p.Password = newPassword;
+            _db.SaveChanges();
+            TempData["Msg"] = "Şifre değiştirildi.";
+        }
+        return RedirectToAction("Profile");
+    }
+
 }
